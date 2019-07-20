@@ -22,7 +22,7 @@ Ensure you have this installed before proceeding further
 - Any console emulater or terminal
 
 ## About
-This is Node.js application with a RESTfull service implementation.
+This is a Node.js application with a RESTfull service implementation.
 The goal of the project is to 
 - Consume Safaricom M-Pesa APIs (https://developer.safaricom.co.ke/docs#introduction)
 
