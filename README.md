@@ -67,6 +67,7 @@ Cpmponent         | URL                                      | Credentials
 API (backend)     |  http://localhost:8081/mpesastkpush      | 
 
 **Testing the application** 
+####Use any Rest client i.e. postman or install curl. (Below example uses curl)
 The below request will invoke the lipa na mpesa api when the correct parameters are used. Mpesa will then send an stkpush to the user's phone for authorization.
 
 ```bash
