@@ -37,7 +37,7 @@ Ready Methods
 - [ ] REVERSAL
 - [x] LIPA NA MPESA
 
-### Cloning the project from git
+### Getting started
 ```bash
 # Clone the repo
 git clone https://github.com/mulama77/mpesaintegration.git
