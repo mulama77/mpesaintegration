@@ -51,8 +51,8 @@ npm install
 ```
 ### Start the API
 ```bash
-# Before starting the API, ensure port 8081 is not being used
-# ON linux, incase the port is being used, run
+# Before starting the API, ensure port 8081 is not being used.
+# incase the port is being used, run the below command on linux
 kill -9 $(lsof -t -i:8081)
 # Then navigate to mpesaintegration/
 # Then start the listener
