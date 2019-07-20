@@ -43,14 +43,15 @@ git clone https://github.com/mulama77/mpesaintegration.git
 ```
 ### Installing nodejs packages
 ```bash
-# Navigate to PROJECT_FOLDER/
+# Navigate to mpesaintegration/
+cd mpesaintegration
 #Then install node packages
 npm install
 ```
 ### Start the API
 ```bash
 # Before Starting the API, ensure port 8081 is not being used
-# Navigate to PROJECT_FOLDER/
+# Navigate to mpesaintegration/
 # Then start the listener
 npm run start
 # port and other configurations for API server are in [./lib/constants.js]
