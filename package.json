@@ -1,0 +1,35 @@
+{
+  "name": "mpesaintegration",
+  "version": "1.0.0",
+  "description": "Integration Web API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mulama77/mpesaintegration.git"
+  },
+  "keywords": [
+    "Mpesa",
+    "Typscript"
+  ],
+  "author": "Kevin Mulama",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mulama77/mpesaintegration/issues"
+  },
+  "homepage": "https://github.com/mulama77/mpesaintegration#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "app-root-path": "^2.2.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "mpesa-api": "^2.1.2",
+    "winston": "^3.2.1"
+  }
+}
