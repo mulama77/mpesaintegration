@@ -66,10 +66,9 @@ Cpmponent         | URL                                      | Credentials
 ---               | ---                                      | ---
 API (backend)     |  http://localhost:8081/mpesastkpush      | 
 
-**Testing the application.** 
 **Use any rest client application i.e. postman or install curl. (Below example uses curl)**
 The below request will invoke the lipa na mpesa api when the correct parameters are used. Mpesa will then send an stkpush to the user's phone for authorization.
-**N/B Please ensure a valid Safaricom phone number is used**
+**N/B Please ensure a valid Safaricom phone number is used.**
 ```bash
 #request POST application/x-www-form-urlencoded
 curl -X POST --header 'Accept: application/json' --header "Content-Type: application/x-www-form-urlencoded" -d "Amount=10&PhoneNumber=2547xxxxxxxx&TransactionDesc=Cabpayment" 'http://localhost:8081/mpesastkpush'
