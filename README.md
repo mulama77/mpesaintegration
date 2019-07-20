@@ -1,4 +1,4 @@
-## Requisites
+## Credentials
 
 You Will need a few things from Safaricom before development.
 
