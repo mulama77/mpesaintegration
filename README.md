@@ -67,7 +67,7 @@ Cpmponent         | URL                                      | Credentials
 API (backend)     |  http://localhost:8081/mpesastkpush      | 
 
 **Testing the application** 
-The below request will invoke the lipa na mpesa api when the correct parameters are used. Mpesa will then send an stkpush to the user's phone for authentication
+The below request will invoke the lipa na mpesa api when the correct parameters are used. Mpesa will then send an stkpush to the user's phone for authorization.
 
 ```bash
 #request POST application/x-www-form-urlencoded
