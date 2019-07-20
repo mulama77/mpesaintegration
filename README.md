@@ -72,9 +72,9 @@ The below request will invoke the lipa na mpesa api when the correct parameters 
 
 ```bash
 #request POST application/x-www-form-urlencoded
-curl -X POST --header 'Accept: application/json' -d "Amount=10&PhoneNumber=2547xxxxxxxx&TransactionDesc=Cabpayment" 'http://localhost:8081/api/mpesastkpush'
+curl -X POST --header 'Accept: application/json' -d "Amount=10&PhoneNumber=2547xxxxxxxx&TransactionDesc=Cabpayment" 'http://localhost:8081/mpesastkpush'
 #or POST application/json
-curl -X POST --header 'Accept: application/json' --header "Content-Type: application/json" -d '{"Amount":"10", "PhoneNumber":"2547xxxxxxxx", "TransactionDesc":"Cabpayment"}' 'http://localhost:8081/api/mpesastkpush'
+curl -X POST --header 'Accept: application/json' --header "Content-Type: application/json" -d '{"Amount":"10", "PhoneNumber":"2547xxxxxxxx", "TransactionDesc":"Cabpayment"}' 'http://localhost:8081/mpesastkpush'
 
 #response
 {"MerchantRequestID":"18438-5831326-1","CheckoutRequestID":"ws_CO_DMZ_540072342_20072019060327336","ResponseCode":"0","ResponseDescription":"Success. Request accepted for processing","CustomerMessage":"Success. Request accepted for processing"}
