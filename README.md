@@ -51,7 +51,7 @@ npm install
 ### Start the API
 ```bash
 # Before Starting the API, ensure port 8081 is not being used
-# Navigate to mpesaintegration/
+# Then navigate to mpesaintegration/
 # Then start the listener
 npm run start
 # port and other configurations for API server are in [./lib/constants.js]
