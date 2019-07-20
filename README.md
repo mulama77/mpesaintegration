@@ -17,7 +17,8 @@ You Will need a few things from Safaricom before development.
 ## Prerequisites
 Ensure you have this installed before proceeding further
 - Node 6.0 or above,  
-- npm 5 or above,   
+- npm 5 or above,  
+- git client, 
 - Any console emulater or terminal
 
 ## About
