@@ -66,8 +66,8 @@ Cpmponent         | URL                                      | Credentials
 ---               | ---                                      | ---
 API (backend)     |  http://localhost:8081/mpesastkpush      | 
 
-**Testing the backend application** 
-The below request will fetch existing products automatically inserted when the backend application was started
+**Testing the application** 
+The below request will invoke the lipa na mpesa api when the correct parameters are used. Mpesa will then send an stkpush to the user's phone
 
 ```bash
 #request POST application/x-www-form-urlencoded
