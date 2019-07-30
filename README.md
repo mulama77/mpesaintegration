@@ -75,6 +75,8 @@ curl -X POST --header 'Accept: application/json' --header "Content-Type: applica
 #or POST application/json
 curl -X POST --header 'Accept: application/json' --header "Content-Type: application/json" -d '{"Amount":"10", "PhoneNumber":"2547xxxxxxxx", "TransactionDesc":"Cabpayment"}' 'http://localhost:8081/mpesastkpush'
 
+**N/B The application has already been deployed in the below dev server ip: 3.122.233.128**
+
 #response
 {"MerchantRequestID":"18438-5831326-1","CheckoutRequestID":"ws_CO_DMZ_540072342_20072019060327336","ResponseCode":"0","ResponseDescription":"Success. Request accepted for processing","CustomerMessage":"Success. Request accepted for processing"}
 ```
