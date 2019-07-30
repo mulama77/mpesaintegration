@@ -9,6 +9,9 @@ var bodyParser = require('body-parser');
 // used for application logging for later troubleshooting
 var morgan = require('morgan');
 var winston = require('./lib/winston');
+// package used in managing http connections
+var http = require('http');
+
 // create an instance of express package
 var app = express();
 
@@ -76,8 +79,9 @@ app.post('/mpesastkpush', function (req, res) {
 })
 
   //server listener
-var server = app.listen(Constants.ServerPort, "::0", function () {
+var server = http.createServer(app).listen(Constants.ServerPort, "0.0.0.0" , function () {
    var host = server.address().address
    var port = server.address().port
    console.log("Example app listening at http://%s:%s", host, port)
-})
+});
+
