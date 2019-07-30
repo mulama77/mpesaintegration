@@ -30,7 +30,7 @@ app.post('/mpesastkpush', function (req, res) {
     certificatepath: Constants.certificatepath
     };
     
-    // the mpesa enrironment this api is pointing to
+    // the mpesa environnment this api is pointing to
     const environment = Constants.environment;
 
     // create a new instance of the api
@@ -76,9 +76,8 @@ app.post('/mpesastkpush', function (req, res) {
 })
 
   //server listener
-var server = app.listen(Constants.ServerPort, function () {
+var server = app.listen(Constants.ServerPort, "::0", function () {
    var host = server.address().address
    var port = server.address().port
    console.log("Example app listening at http://%s:%s", host, port)
 })
-
