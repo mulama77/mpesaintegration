@@ -83,7 +83,9 @@ app.post('/mpesastkpush', function (req, res) {
 })
 
 ///////////////////////////////////////////////////////////
-// lipanampesa callback
+// lipanampesa callback. 
+// This is a callback from Mpesa informing us
+// that a transaction we had earlier initiated has been approved successfully by the customer
 ///////////////////////////////////////////////////////////
 app.post('/mpesacallback', function (req, res) {
     
@@ -92,6 +94,9 @@ app.post('/mpesacallback', function (req, res) {
 
 ///////////////////////////////////////////////////////////
 // lipa na mpesa query requests
+// This allows us to query Mpesa to check what is the status of a transaction 
+// just incase Mpesa took time in sending us a call back after we had earlier initiated a 
+// request. Typically we expect a callback not more than 15 seconds. 
 ///////////////////////////////////////////////////////////
 app.post('/mpesastkquery', function (req, res) {
     
