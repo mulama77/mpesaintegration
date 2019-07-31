@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "mpesa-api": "^2.1.2",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "winston-loggly-bulk": "^3.0.1"
   }
 }

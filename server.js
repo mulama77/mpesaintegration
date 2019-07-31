@@ -22,6 +22,8 @@ app.use(bodyParser.json())
 
 app.use(morgan('combined', { stream: winston.stream }));
 
+
+
 // listen to api requests
 
 ///////////////////////////////////////////////////////////
@@ -87,8 +89,10 @@ app.post('/mpesastkpush', function (req, res) {
 // This is a callback from Mpesa informing us
 // that a transaction we had earlier initiated has been approved successfully by the customer
 ///////////////////////////////////////////////////////////
-app.post('/mpesacallback', function (req, res) {
-    
+app.post('/stkCallback', function (req, res) {
+
+ winston.log('info', req.body.Body.stkCallback);
+ res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
  console.log("Waiting for the next request!");
 })
 
