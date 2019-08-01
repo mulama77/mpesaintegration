@@ -203,7 +203,7 @@ app.post('/c2bregister', function (req, res) {
   // invoking the mpesa api
   mpesa
   .c2bregister({
-    ShortCode: Constants.BusinessShortCode,
+    ShortCode: Constants.PaybillBuygoodsShortCode,
     ConfirmationURL: Constants.DirectPaybillConfirmationURL,
     ValidationURL: Constants.DirectPaybillValidationURL,
     ResponseType: "Completed"
@@ -238,7 +238,7 @@ app.post('/c2bsimulate', function (req, res) {
     "TransID": "LHG31AA5TX",
     "TransTime": "20170816190243",
     "TransAmount": "200.00",
-    "BusinessShortCode": "601426",
+    "BusinessShortCode": "600638",
     "BillRefNumber": "account",
     "InvoiceNumber": "",
     "OrgAccountBalance": "",
