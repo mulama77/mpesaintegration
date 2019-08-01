@@ -82,7 +82,53 @@ app.post('/mpesastkpush', function (req, res) {
 ///////////////////////////////////////////////////////////
 app.post('/stkCallback', function (req, res) {
 
+  // Sample payload from Mpesa
+  /*
+    {
+    "Body": 
+    {
+      "stkCallback": 
+      {
+        "MerchantRequestID": "21605-295434-4",
+        "CheckoutRequestID": "ws_CO_04112017184930742",
+        "ResultCode": 0,
+        "ResultDesc": "The service request is processed successfully.",
+        "CallbackMetadata": 
+        {
+          "Item": 
+          [
+            {
+              "Name": "Amount",
+              "Value": 1
+            },
+            {
+              "Name": "MpesaReceiptNumber",
+              "Value": "LK451H35OP"
+            },
+            {
+              "Name": "Balance"
+            },
+            {
+              "Name": "TransactionDate",
+              "Value": 20171104184944
+            },
+            {
+              "Name": "PhoneNumber",
+              "Value": 254727894083
+            }
+          ]
+        }
+      }
+    }
+  }
+  */
+
  winston.log('info', req.body);
+ // Do something with the payload
+ // Update the final status of the transaction 
+ // you had initially received from the customer 
+ // and saved
+
  res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
  console.log("Waiting for the next request!");
 })
@@ -132,11 +178,12 @@ app.post('/mpesastkquery', function (req, res) {
  console.log("Waiting for the next request!");
 })
 
-///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 // c2b register
-// This API enables Paybill and Buy Goods merchants to 
-// integrate to M-Pesa and receive real time payments notifications.
-///////////////////////////////////////////////////////////
+// This endpoint is only used when we have configured our account 
+// in mpesa for it to first validate a transaction endpoint and shortcode
+// with us before it finally gives us the final transaction from the customer
+//////////////////////////////////////////////////////////////////////////
 app.post('/c2bregister', function (req, res) {
     
   // credentials used in executing the mpesa api
@@ -156,10 +203,10 @@ app.post('/c2bregister', function (req, res) {
   // invoking the mpesa api
   mpesa
   .c2bregister({
-    ShortCode: "Short Code",
-    ConfirmationURL: "Confirmation URL",
-    ValidationURL: "Validation URL",
-    ResponseType: "Response Type"
+    ShortCode: Constants.BusinessShortCode,
+    ConfirmationURL: Constants.DirectPaybillConfirmationURL,
+    ValidationURL: Constants.DirectPaybillValidationURL,
+    ResponseType: "Completed"
   })
   .then(response => {
   //Do something with the response
@@ -179,46 +226,34 @@ app.post('/c2bregister', function (req, res) {
 
 ///////////////////////////////////////////////////////////
 // c2b simulate
+// This is the actual API endpoint where Paybill and Buy Goods
+// transactions from Mpesa are finally sent.
 ///////////////////////////////////////////////////////////
 app.post('/c2bsimulate', function (req, res) {
     
-  // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
+  // Sample payload from Mpesa
+  /*
+  {
+    "TransactionType": "",
+    "TransID": "LHG31AA5TX",
+    "TransTime": "20170816190243",
+    "TransAmount": "200.00",
+    "BusinessShortCode": "601426",
+    "BillRefNumber": "account",
+    "InvoiceNumber": "",
+    "OrgAccountBalance": "",
+    "ThirdPartyTransID": "",
+    "MSISDN": "254708374149",
+    "FirstName": "John",
+    "MiddleName": "",
+    "LastName": "Doe"
+  }
+  */
 
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
+  winston.log('info', req.body);
+  res.end( JSON.stringify(0));
+  console.log("Waiting for the next request!");
 
-  // invoking the mpesa api
-  mpesa
-  .c2bsimulate({
-    ShortCode: 123456,
-    Amount: 1000 /* 1000 is an example amount */,
-    Msisdn: 254792123456,
-    CommandID: "Command ID" /* OPTIONAL */,
-    BillRefNumber: "Bill Reference Number" /* OPTIONAL */
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
-  
- console.log("Waiting for the next request!");
 })
 
 
