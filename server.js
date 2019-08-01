@@ -62,23 +62,14 @@ app.post('/mpesastkpush', function (req, res) {
     .then(response => {
     //Do something with the response
     //eg
-    console.log(response);
-    /*
-    logger.log({
-        level: 'info',
-        message: response
-      }); */
-    res.end( JSON.stringify(response));
+    winston.log('info', response);
+    res.end(0);
     })
     .catch(error => {
     //Do something with the error;
     //eg
-    console.error("ERROR"+error);
-    /*logger.log({
-        level: 'error',
-        message: error
-      }); */
-    res.end( JSON.stringify(error));
+    winston.log('error', error);
+    res.end(0);
     });
     
    console.log("Waiting for the next request!");
@@ -91,8 +82,8 @@ app.post('/mpesastkpush', function (req, res) {
 ///////////////////////////////////////////////////////////
 app.post('/stkCallback', function (req, res) {
 
- winston.log('info', req.body.Body.stkCallback);
- res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
+ winston.log('info', req.body);
+ res.end(JSON.stringify(req.body.Body.stkCallback.ResultCode));
  console.log("Waiting for the next request!");
 })
 
@@ -128,23 +119,14 @@ app.post('/mpesastkquery', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -182,23 +164,14 @@ app.post('/c2bregister', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -235,23 +208,14 @@ app.post('/c2bsimulate', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -294,23 +258,14 @@ app.post('/b2c', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -350,23 +305,14 @@ app.post('/b2candc2bTransactionStatus', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -409,23 +355,14 @@ app.post('/b2candc2bReversal', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
@@ -465,23 +402,14 @@ app.post('/accountBalance', function (req, res) {
   .then(response => {
   //Do something with the response
   //eg
-  console.log(response);
-  /*
-  logger.log({
-      level: 'info',
-      message: response
-    }); */
-  res.end( JSON.stringify(response));
+  winston.log('info', response);
+  res.end(0);
   })
   .catch(error => {
   //Do something with the error;
   //eg
-  console.error("ERROR"+error);
-  /*logger.log({
-      level: 'error',
-      message: error
-    }); */
-  res.end( JSON.stringify(error));
+  winston.log('error', error);
+  res.end(0);
   });
   
  console.log("Waiting for the next request!");
