@@ -63,13 +63,13 @@ app.post('/mpesastkpush', function (req, res) {
     //Do something with the response
     //eg
     winston.log('info', response);
-    res.end(0);
+    res.end(response);
     })
     .catch(error => {
     //Do something with the error;
     //eg
     winston.log('error', error);
-    res.end(0);
+    res.end(error);
     });
     
    console.log("Waiting for the next request!");
@@ -83,7 +83,7 @@ app.post('/mpesastkpush', function (req, res) {
 app.post('/stkCallback', function (req, res) {
 
  winston.log('info', req.body);
- res.end(JSON.stringify(req.body.Body.stkCallback.ResultCode));
+ res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
  console.log("Waiting for the next request!");
 })
 
@@ -112,21 +112,21 @@ app.post('/mpesastkquery', function (req, res) {
   // invoking the mpesa api
   mpesa
   .lipaNaMpesaQuery({
-    BusinessShortCode: 123456,
-    CheckoutRequestID: "Checkout Request ID",
-    passKey: "Lipa Na Mpesa Pass Key"
+    BusinessShortCode: Constants.BusinessShortCode,
+    CheckoutRequestID: req.body.CheckoutRequestID,
+    passKey: Constants.passKey
   })
   .then(response => {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -165,13 +165,13 @@ app.post('/c2bregister', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -209,13 +209,13 @@ app.post('/c2bsimulate', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -259,13 +259,13 @@ app.post('/b2c', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -306,13 +306,13 @@ app.post('/b2candc2bTransactionStatus', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -356,13 +356,13 @@ app.post('/b2candc2bReversal', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
@@ -403,13 +403,13 @@ app.post('/accountBalance', function (req, res) {
   //Do something with the response
   //eg
   winston.log('info', response);
-  res.end(0);
+  res.end(response);
   })
   .catch(error => {
   //Do something with the error;
   //eg
   winston.log('error', error);
-  res.end(0);
+  res.end(error);
   });
   
  console.log("Waiting for the next request!");
