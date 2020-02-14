@@ -1,76 +1,65 @@
 // package used in creating this rest api in nodejs
 var express = require('express');
 // package used to invoke mpesa api's
-const Mpesa = require("mpesa-api").Mpesa;
+const Mpesa = require("mpesa-node");
+
 // used in storing the constant variables
 var Constants = require('./lib/constants');
 // package used in parsing the payloads
 var bodyParser = require('body-parser');
 // used for application logging for later troubleshooting
 var morgan = require('morgan');
+// used for application logging for later troubleshooting
 var winston = require('./lib/winston');
 // package used in managing http connections
 var http = require('http');
-
+// used to open relative paths
+var path = require('path');
 // create an instance of express package
 var app = express();
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(morgan('combined', { stream: winston.stream }));
-
-
-
 // listen to api requests
-
 ///////////////////////////////////////////////////////////
 // lipa na mpesa api requests
 ///////////////////////////////////////////////////////////
 app.post('/mpesastkpush', function (req, res) {
     
-    // credentials used in executing the mpesa api
-    const credentials = {
-    client_key: Constants.client_key,
-    client_secret: Constants.client_secret,
-    initiator_password: Constants.initiator_password,
-    certificatepath: Constants.certificatepath
-    };
-    
-    // the mpesa environnment this api is pointing to
-    const environment = Constants.environment;
-
-    // create a new instance of the api
-    const mpesa = new Mpesa(credentials, environment);
-  
-    // invoking the mpesa api
-    mpesa
-    .lipaNaMpesaOnline({
-    BusinessShortCode: Constants.BusinessShortCode,
-    Amount: req.body.Amount, 
-    PartyA: req.body.PhoneNumber,
-    PartyB: Constants.PartyB,
-    PhoneNumber: req.body.PhoneNumber,
-    CallBackURL: Constants.CallBackURL,
-    AccountReference: Constants.AccountReference,
-    passKey: Constants.passKey,
-    TransactionType: Constants.TransactionType, // OPTIONAL 
-    TransactionDesc: req.body.TransactionDesc // OPTIONAL 
-    })
-    .then(response => {
-    //Do something with the response
-    //eg
-    winston.log('info', response);
-    res.end(JSON.stringify(response));
-    })
-    .catch(error => {
-    //Do something with the error;
-    //eg
-    winston.log('error', error);
-    res.end(JSON.stringify(error));
-    });
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
+ })
+   // invoking the mpesa api
+   mpesa
+   .lipaNaMpesaOnline(
+     req.body.PhoneNumber, 
+     req.body.Amount, 
+     Constants.ResultURL, 
+     req.body.MerchantRequestID, 
+     req.body.TransactionDesc, 
+     Constants.TransactionType, 
+     Constants.lipanampesa_shortcode, 
+     Constants.lipanampesa_passkey
+     ).then(res => {
+      //Do something with the response
+      winston.log('info', res.data);
+      res.end();
+      })
+      .catch(error => {
+      //Do something with the error;
+      winston.log('error', error);
+      res.end();
+      })
     
    console.log("Waiting for the next request!");
 })
@@ -123,14 +112,14 @@ app.post('/stkCallback', function (req, res) {
   }
   */
 
- winston.log('info', req.body);
- // Do something with the payload
- // Update the final status of the transaction 
- // you had initially received from the customer 
- // and saved
+  winston.log('info', req.body);
+  // Do something with the payload
+  // Update the final status of the transaction 
+  // you had initially received from the customer 
+  // and saved
 
- res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
- console.log("Waiting for the next request!");
+  res.end( JSON.stringify(req.body.Body.stkCallback.ResultCode));
+  console.log("Waiting for the next request!");
 })
 
 ///////////////////////////////////////////////////////////
@@ -140,121 +129,37 @@ app.post('/stkCallback', function (req, res) {
 // request. Typically we expect a callback not more than 15 seconds. 
 ///////////////////////////////////////////////////////////
 app.post('/mpesastkquery', function (req, res) {
-    
-  // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
 
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
-
+ // create a new instance of the api
+ const mpesa =  new Mpesa({
+   consumerKey: Constants.paybill_client_key,
+   consumerSecret: Constants.paybill_client_secret,
+   environment: Constants.environment,
+   shortCode: Constants.paybill_shortcode1,
+   initiatorName: Constants.paybill_initiator_name,
+   lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+   lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+   securityCredential: Constants.paybill_security_credentials,
+   certPath: path.resolve(Constants.certificatepath)
+})
   // invoking the mpesa api
   mpesa
-  .lipaNaMpesaQuery({
-    BusinessShortCode: Constants.BusinessShortCode,
-    CheckoutRequestID: req.body.CheckoutRequestID,
-    passKey: Constants.passKey
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
+  .lipaNaMpesaQuery(
+    req.body.CheckoutRequestID //This is the request id generated by mpesa from previous transations
+    )
+  .then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+    res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+    res.end();
+    })
   
  console.log("Waiting for the next request!");
-})
-
-/////////////////////////////////////////////////////////////////////////
-// c2b register
-// This endpoint is only used when we have configured our account 
-// in mpesa for it to first validate a transaction endpoint and shortcode
-// with us before it finally gives us the final transaction from the customer
-//////////////////////////////////////////////////////////////////////////
-app.post('/c2bregister', function (req, res) {
-    
-  // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
-
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
-
-  // invoking the mpesa api
-  mpesa
-  .c2bregister({
-    ShortCode: Constants.PaybillBuygoodsShortCode,
-    ConfirmationURL: Constants.DirectPaybillConfirmationURL,
-    ValidationURL: Constants.DirectPaybillValidationURL,
-    ResponseType: "Completed"
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
-  
- console.log("Waiting for the next request!");
-})
-
-///////////////////////////////////////////////////////////
-// c2b simulate
-// This is the actual API endpoint where Paybill and Buy Goods
-// transactions from Mpesa are finally sent.
-///////////////////////////////////////////////////////////
-app.post('/c2bsimulate', function (req, res) {
-    
-  // Sample payload from Mpesa
-  /*
-  {
-    "TransactionType": "",
-    "TransID": "LHG31AA5TX",
-    "TransTime": "20170816190243",
-    "TransAmount": "200.00",
-    "BusinessShortCode": "600638",
-    "BillRefNumber": "account",
-    "InvoiceNumber": "",
-    "OrgAccountBalance": "",
-    "ThirdPartyTransID": "",
-    "MSISDN": "254708374149",
-    "FirstName": "John",
-    "MiddleName": "",
-    "LastName": "Doe"
-  }
-  */
-
-  winston.log('info', req.body);
-  res.end( JSON.stringify(0));
-  console.log("Waiting for the next request!");
-
-})
+});
 
 
 ///////////////////////////////////////////////////////////
@@ -262,146 +167,168 @@ app.post('/c2bsimulate', function (req, res) {
 // This API enables the company to send funds to the customer
 ///////////////////////////////////////////////////////////
 app.post('/b2c', function (req, res) {
-    
-  // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
 
   // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
-
-  // invoking the mpesa api
-  mpesa
-  .b2c({
-    InitiatorName: "Initiator Name",
-    Amount: 1000 /* 1000 is an example amount */,
-    PartyA: "Party A",
-    PartyB: "Party B",
-    QueueTimeOutURL: "Queue Timeout URL",
-    ResultURL: "Result URL",
-    CommandID: "Command ID" /* OPTIONAL */,
-    Occasion: "Occasion" /* OPTIONAL */,
-    Remarks: "Remarks" /* OPTIONAL */
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
-  
- console.log("Waiting for the next request!");
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
 })
+
+    // invoking the mpesa api
+    mpesa.b2c(
+      Constants.paybill_shortcode1, 
+      req.body.PhoneNumber, 
+      req.body.Amount, 
+      Constants.QueueTimeOutURL, 
+      Constants.ResultURL, 
+      Constants.CommandID, 
+      Constants.paybill_initiator_name, 
+      req.body.TransactionDesc, 
+      Constants.Occassion
+    ).then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+      res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+      res.end();
+    })
+
+    console.log("Waiting for the next request!");
+});
+
+
+///////////////////////////////////////////////////////////
+// b2b requests
+// This API enables the company to send funds from mpesa paybill to another business paybill which has mpesa
+///////////////////////////////////////////////////////////
+app.post('/b2b', function (req, res) {
+
+  // create a new instance of the api
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
+})
+
+    // invoking the mpesa api
+    mpesa.b2b(
+      shortCode,
+      testShortcode2,
+      100,
+      Constants.QueueTimeOutURL,
+      Constants.ResultURL
+      )
+    .then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+      res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+      res.end();
+    })
+
+    console.log("Waiting for the next request!");
+});
 
 ///////////////////////////////////////////////////////////
 // Transaction status
 // Transaction Status API checks the status of a B2C and C2B APIs transactions.
 ///////////////////////////////////////////////////////////
-app.post('/b2candc2bTransactionStatus', function (req, res) {
+app.post('/b2bandb2candc2bTransactionStatus', function (req, res) {
     
   // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
-
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
+  })
 
   // invoking the mpesa api
   mpesa
-  .accountBalance({
-    Initiator: "Initiator Name",
-    PartyA: "Party A",
-    IdentifierType: "Identifier Type",
-    QueueTimeOutURL: "Queue Timeout URL",
-    ResultURL: "Result URL",
-    CommandID: "Command ID" /* OPTIONAL */,
-    Remarks: "Remarks" /* OPTIONAL */
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
+  .transactionStatus(
+    'LKXXXX1234',
+     shortCode,
+      4,
+    Constants.QueueTimeOutURL,
+    Constants.ResultURL
+    )
+  .then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+    res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+    res.end();
+    })
   
  console.log("Waiting for the next request!");
-})
+});
 
 ///////////////////////////////////////////////////////////
 // Reversal
 // Reverses a B2C or C2B M-Pesa transaction.
 ///////////////////////////////////////////////////////////
-app.post('/b2candc2bReversal', function (req, res) {
+app.post('/b2bandb2candc2bReversal', function (req, res) {
     
   // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
-
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
-
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
+  })
   // invoking the mpesa api
   mpesa
-  .reversal({
-    Initiator: "Initiator",
-    TransactionID: "Transaction ID",
-    Amount: 1000 /* 1000 is an example amount */,
-    ReceiverParty: "Reciever Party",
-    ResultURL: "Result URL",
-    QueueTimeOutURL: "Queue Timeout URL",
-    CommandID: "Command ID" /* OPTIONAL */,
-    RecieverIdentifierType: 11 /* OPTIONAL */,
-    Remarks: "Remarks" /* OPTIONAL */,
-    Occasion: "Ocassion" /* OPTIONAL */
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
+  .reversal(
+    'LKXXXX1234',
+     100,
+     Constants.QueueTimeOutURL,
+     Constants.ResultURL
+    )
+  .then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+    res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+    res.end();
+    })
   
  console.log("Waiting for the next request!");
-})
+});
 
 ///////////////////////////////////////////////////////////
 // account balance
@@ -410,50 +337,44 @@ app.post('/b2candc2bReversal', function (req, res) {
 app.post('/accountBalance', function (req, res) {
     
   // credentials used in executing the mpesa api
-  const credentials = {
-  client_key: Constants.client_key,
-  client_secret: Constants.client_secret,
-  initiator_password: Constants.initiator_password,
-  certificatepath: Constants.certificatepath
-  };
-  
-  // the mpesa environnment this api is pointing to
-  const environment = Constants.environment;
-
-  // create a new instance of the api
-  const mpesa = new Mpesa(credentials, environment);
-
+  const mpesa =  new Mpesa({
+    consumerKey: Constants.paybill_client_key,
+    consumerSecret: Constants.paybill_client_secret,
+    environment: Constants.environment,
+    shortCode: Constants.paybill_shortcode1,
+    initiatorName: Constants.paybill_initiator_name,
+    lipaNaMpesaShortCode: Constants.lipanampesa_shortcode,
+    lipaNaMpesaShortPass: Constants.lipanampesa_passkey,
+    securityCredential: Constants.paybill_security_credentials,
+    certPath: path.resolve(Constants.certificatepath)
+  })
   // invoking the mpesa api
   mpesa
-  .accountBalance({
-    Initiator: "Initiator Name",
-    PartyA: "Party A",
-    IdentifierType: "Identifier Type",
-    QueueTimeOutURL: "Queue Timeout URL",
-    ResultURL: "Result URL",
-    CommandID: "Command ID" /* OPTIONAL */,
-    Remarks: "Remarks" /* OPTIONAL */
-  })
-  .then(response => {
-  //Do something with the response
-  //eg
-  winston.log('info', response);
-  res.end(JSON.stringify(response));
-  })
-  .catch(error => {
-  //Do something with the error;
-  //eg
-  winston.log('error', error);
-  res.end(JSON.stringify(error));
-  });
+  .accountBalance(
+    shortCode,
+     4,
+     Constants.QueueTimeOutURL,
+     Constants.ResultURL
+   )
+  .then(res => {
+    //Do something with the response
+    winston.log('info', res.data);
+    res.end();
+    })
+    .catch(error => {
+    //Do something with the error;
+    winston.log('error', error);
+    res.end();
+    })
   
  console.log("Waiting for the next request!");
-})
+});
 
   //server listener
 var server = http.createServer(app).listen(Constants.ServerPort, "0.0.0.0" , function () {
+  
    var host = server.address().address
    var port = server.address().port
-   console.log("Example app listening at http://%s:%s", host, port)
+   console.log("Example app listening at http://%s:%s", host, port);
 });
 
