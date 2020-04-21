@@ -28,13 +28,12 @@ The goal of the project is to
 
 Ready Methods
 
-- [ ] C2BSIMULATE
-- [ ] B2B
-- [ ] C2B
-- [ ] B2C
-- [ ] TRANSACTION STATUS
-- [ ] ACCOUNT BALANCE
-- [ ] REVERSAL
+- [x] B2B
+- [x] C2B
+- [x] B2C
+- [x] TRANSACTION STATUS
+- [x] ACCOUNT BALANCE
+- [x] REVERSAL
 - [x] LIPA NA MPESA
 
 ### Getting started
@@ -71,9 +70,9 @@ The below request will invoke the lipa na mpesa api when the correct parameters 
 **N/B Please ensure a valid Safaricom phone number is used.**
 ```bash
 #request POST application/x-www-form-urlencoded
-curl -X POST --header 'Accept: application/json' --header "Content-Type: application/x-www-form-urlencoded" -d "Amount=10&PhoneNumber=2547xxxxxxxx&TransactionDesc=Cabpayment" 'http://localhost:8081/mpesastkpush'
+curl -X POST --header 'Accept: application/json' --header "Content-Type: application/x-www-form-urlencoded" -d "Amount=10&PhoneNumber=2547xxxxxxxx&TransactionDesc=Cabpayment&MerchantRequestID=123456" 'http://localhost:8081/mpesastkpush'
 #or POST application/json
-curl -X POST --header 'Accept: application/json' --header "Content-Type: application/json" -d '{"Amount":"10", "PhoneNumber":"2547xxxxxxxx", "TransactionDesc":"Cabpayment"}' 'http://localhost:8081/mpesastkpush'
+curl -X POST --header 'Accept: application/json' --header "Content-Type: application/json" -d '{"Amount":"10", "PhoneNumber":"2547xxxxxxxx", "TransactionDesc":"Cabpayment","MerchantRequestID":"123456"}' 'http://localhost:8081/mpesastkpush'
 
 #N/B The application has already been deployed in the below dev server ip: 3.122.233.128
 
