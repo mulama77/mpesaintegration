@@ -29,8 +29,8 @@ app.use(bodyParser.json())
 app.post('/mpesastkpush', function (req, res) {
     
   const mpesa =  new Mpesa({
-    consumerKey: Constants.paybill_client_key,
-    consumerSecret: Constants.paybill_client_secret,
+    consumerKey: Constants.lipanampesa_client_key,
+    consumerSecret: Constants.lipanampesa_client_secret,
     environment: Constants.environment,
     shortCode: Constants.paybill_shortcode1,
     initiatorName: Constants.paybill_initiator_name,
@@ -182,7 +182,8 @@ app.post('/b2c', function (req, res) {
 })
 
     // invoking the mpesa api
-    mpesa.b2c(
+    mpesa
+    /*.b2c(
       Constants.paybill_shortcode1, 
       req.body.PhoneNumber, 
       req.body.Amount, 
@@ -192,7 +193,14 @@ app.post('/b2c', function (req, res) {
       Constants.paybill_initiator_name, 
       req.body.TransactionDesc, 
       Constants.Occassion
-    ).then(res => {
+    ) */
+    .b2c(
+     Constants.paybill_shortcode1,
+     req.body.PhoneNumber,
+     req.body.Amount,
+     Constants.QueueTimeOutURL,
+     Constants.ResultURL)
+    .then(res => {
     //Do something with the response
     winston.log('info', res.data);
       res.end();
